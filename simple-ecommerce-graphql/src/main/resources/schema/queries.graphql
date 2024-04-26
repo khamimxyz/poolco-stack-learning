@@ -1,0 +1,6 @@
+type Query {
+    getProduct(id: String): Product
+    getPromotion(id: String): Promotion
+    getPromotionsByProductId(productId: String): [Promotion]
+    getOrderDetail(id: String): OrderDetail
+}

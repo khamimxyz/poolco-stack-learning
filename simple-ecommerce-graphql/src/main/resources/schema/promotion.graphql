@@ -1,0 +1,12 @@
+input PromotionReq {
+    name: String,
+    discount: Int,
+    productIds: [String]
+}
+
+type Promotion {
+    id: String,
+    name: String,
+    discount: Int,
+    productIds: [String]
+}

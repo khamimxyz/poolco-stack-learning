@@ -1,0 +1,12 @@
+input ProductReq {
+    name: String,
+    category: String,
+    price: Int
+}
+
+type Product {
+    id: String,
+    name: String,
+    category: String
+    price: Int
+}

@@ -1,0 +1,29 @@
+input ProductPromotionReq {
+    productId: String,
+    qty: Int,
+    price: Int,
+    promotionId: String,
+    discount: Int
+}
+
+input OrderReq {
+    orderProducts: [ProductPromotionReq]
+}
+
+type ProductPromotionDetail {
+    productName: String,
+    qty: Int,
+    price: Int,
+    promotionName: String
+    discount: Int
+}
+
+type Order {
+    id: String,
+    orderProductIds: [String]
+}
+
+type OrderDetail {
+    id: String,
+    orderProducts: [ProductPromotionDetail]
+}

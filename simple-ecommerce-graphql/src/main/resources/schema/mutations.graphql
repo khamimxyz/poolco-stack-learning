@@ -1,0 +1,9 @@
+type Mutation {
+    addProduct(productReq: ProductReq): Product
+    updateProduct(id: String, productReq: ProductReq): Product
+    deleteProduct(id: String): Boolean
+    addPromotion(promotionReq: PromotionReq): Promotion
+    updatePromotion(id: String, promotionReq: PromotionReq): Promotion
+    deletePromotion(id: String): Boolean
+    addOrder(orderReq: OrderReq): Order
+}
