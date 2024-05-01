@@ -47,4 +47,9 @@ public class PromotionService {
 
         return repository.getPromotionsByProductId(productId);
     }
+
+    public Mono<List<Promotion>> getAllPromotions() {
+
+        return repository.getAll();
+    }
 }

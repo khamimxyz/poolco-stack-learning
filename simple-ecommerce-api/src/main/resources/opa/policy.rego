@@ -6,22 +6,16 @@ import future.keywords.every
 default allow := false
 
 allow if {
-    input.path = ["product"]
-    allowed_roles := ["Product-Manager"]
-    roles := {role | some role in input.roles; role.authority = allowed_roles[_]}
-    count(roles) > 0
+    input.module = "product"
+    input.role = "Product-Manager"
 }
 
 allow if {
-    input.path = ["promotion"]
-    allowed_roles := ["Promotion-Manager"]
-    roles := {role | some role in input.roles; role.authority = allowed_roles[_]}
-    count(roles) > 0
+    input.module = "promotion"
+    input.role = "Promotion-Manager"
 }
 
 allow if {
-    input.path = ["order"]
-    allowed_roles := ["Order-Manager"]
-    roles := {role | some role in input.roles; role.authority = allowed_roles[_]}
-    count(roles) > 0
+    input.module = "order"
+    input.role = "Order-Manager"
 }

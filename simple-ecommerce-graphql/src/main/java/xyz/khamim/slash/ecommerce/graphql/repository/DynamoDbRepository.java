@@ -6,13 +6,12 @@ import com.amazonaws.services.dynamodbv2.model.*;
 import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.dynamodb.AmazonDynamoDBFactory;
 import xyz.khamim.slash.ecommerce.graphql.model.DynamoItem;
+import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class DynamoDbRepository<T extends DynamoItem> {
 
@@ -46,6 +45,20 @@ public class DynamoDbRepository<T extends DynamoItem> {
             .fromCallable(() -> amazonDynamoDB.getItem(getItemRequest))
             .flatMap(result -> result == null ? Mono.empty() :
                     Mono.just(ModelMapper.mapToModel(result.getItem(), getTableClass())));
+    }
+
+    public Mono<List<T>> getAll() {
+
+        return Mono
+                .fromCallable(() -> dynamoDB.getTable(getTableName()))
+                .flatMap(table -> {
+                    final List<T> list = new ArrayList<>();
+                    table.scan().forEach(item -> {
+                        list.add(ModelMapper.mapObjectToModel(item.asMap(), getTableClass()));
+                    });
+
+                    return Mono.just(list);
+                });
     }
 
     public Mono<T> update(T item) {

@@ -1,6 +1,8 @@
 type Query {
     getProduct(id: String): Product
+    getAllProducts: [Product]
     getPromotion(id: String): Promotion
+    getAllPromotions: [Promotion]
     getPromotionsByProductId(productId: String): [Promotion]
     getOrderDetail(id: String): OrderDetail
 }

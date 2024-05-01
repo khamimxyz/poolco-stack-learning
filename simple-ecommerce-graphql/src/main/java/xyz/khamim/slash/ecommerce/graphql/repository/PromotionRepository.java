@@ -16,9 +16,6 @@ public class PromotionRepository extends DynamoDbRepository<Promotion> {
 
     public Mono<List<Promotion>> getPromotionsByProductId(String productId) {
 
-        QueryRequest queryRequest = new QueryRequest()
-                .withTableName(getTableName());
-
         return Mono
                 .fromCallable(() -> dynamoDB.getTable(getTableName()))
                 .flatMap(table -> {

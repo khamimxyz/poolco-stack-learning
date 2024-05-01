@@ -23,7 +23,7 @@ public class SecurityConfig {
 
     private final OpaAuthorizationManager opaAuthorizationManager;
 
-    private final String[] securedApi = new String[]{"/product", "/promotion", "/order"};
+    private final String[] securedApi = new String[]{"/api/product/**", "/api/promotion/**", "/api/order/**"};
 
     @Bean
     public ReactiveJwtDecoder jwtDecoder() {
@@ -34,13 +34,12 @@ public class SecurityConfig {
     public SecurityWebFilterChain filterChain(ServerHttpSecurity http) {
         return http
                 .authorizeExchange(exchanges -> exchanges
-                        .matchers(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/authenticate"))
-                        .permitAll()
-                        .matchers(ServerWebExchangeMatchers.pathMatchers(HttpMethod.GET, "/graphiql"))
+                        .matchers(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, "/api/auth/authenticate"))
                         .permitAll()
                         .matchers(ServerWebExchangeMatchers.pathMatchers(HttpMethod.POST, securedApi))
                         .access(opaAuthorizationManager)
-                        .anyExchange().authenticated()
+                        .matchers(ServerWebExchangeMatchers.pathMatchers(HttpMethod.GET, securedApi))
+                        .permitAll()
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> jwt.jwtDecoder(jwtDecoder())))
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)

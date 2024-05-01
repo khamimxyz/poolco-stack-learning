@@ -26,4 +26,10 @@ public class PromotionQueryFetcher {
 
         return service.getPromotionsByProductId(productId);
     }
+
+    @DgsQuery
+    public Mono<List<Promotion>> getAllPromotions() {
+
+        return service.getAllPromotions();
+    }
 }

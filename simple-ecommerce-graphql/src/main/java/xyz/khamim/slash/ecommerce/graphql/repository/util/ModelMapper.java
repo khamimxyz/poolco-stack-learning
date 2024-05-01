@@ -56,7 +56,11 @@ public class ModelMapper {
         try {
             Constructor<T> noArgsConstructor = tClass.getConstructor();
             obj = noArgsConstructor.newInstance();
-            for(Field field : tClass.getDeclaredFields()) {
+            Field[] fields = Stream.concat(
+                    Arrays.stream(tClass.getSuperclass().getDeclaredFields()),
+                    Arrays.stream(tClass.getDeclaredFields())
+            ).toArray(Field[]::new);
+            for(Field field : fields) {
                 field.setAccessible(true);
                 if(field.getType().equals(Integer.class)) {
                     field.set(obj, Integer.parseInt(item.get(field.getName()).getN()));

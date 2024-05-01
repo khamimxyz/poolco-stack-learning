@@ -2,8 +2,10 @@ package xyz.khamim.slash.ecommerce.proxy.opa;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class OpaDataResponse {
 

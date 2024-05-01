@@ -27,18 +27,17 @@ public class OpaAuthorizationManager implements ReactiveAuthorizationManager<Aut
     @Override
     public Mono<AuthorizationDecision> check(Mono<Authentication> authentication, AuthorizationContext context) {
         final ServerWebExchange exchange = context.getExchange();
-        final String[] path = exchange.getRequest().getURI().getPath().replaceAll("^/|/$", "").split("/");
-
+        String[] path = exchange.getRequest().getURI().getPath().replaceAll("^/|/$", "").split("/");
         final String authHeader = exchange.getRequest().getHeaders().getFirst("Authorization");
 
+        String module = path[1];;
         return authentication.map(auth -> {
             final Map<String, Object> input = new HashMap<>();
-            input.put("method", exchange.getRequest().getMethod().toString());
-            input.put("path", path);
+            input.put("module", module);
 
             if(authHeader != null) {
                 final String token = authHeader.replaceAll("Bearer ", "");
-                input.put("token", token);
+                input.put("role", cognitoRoleReader.getRoles(token)[0]);
             }
 
             final OpaDataResponse opaDataResponse = opaClient.authorizedToAccessAPI(new OpaDataRequest(input));

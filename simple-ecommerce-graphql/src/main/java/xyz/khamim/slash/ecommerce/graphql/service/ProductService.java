@@ -8,6 +8,8 @@ import xyz.khamim.slash.ecommerce.graphql.payload.ProductReq;
 import xyz.khamim.slash.ecommerce.graphql.repository.ProductRepository;
 import xyz.khamim.slash.ecommerce.graphql.service.helper.PayloadToModelConverter;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -39,5 +41,10 @@ public class ProductService {
     public Mono<Product> getProduct(String id) {
 
         return repository.get(id);
+    }
+
+    public Mono<List<Product>> getAllProducts() {
+
+        return repository.getAll();
     }
 }

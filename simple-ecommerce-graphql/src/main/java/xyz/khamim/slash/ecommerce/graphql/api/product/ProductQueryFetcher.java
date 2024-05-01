@@ -7,6 +7,8 @@ import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.service.ProductService;
 
+import java.util.List;
+
 @DgsComponent
 @RequiredArgsConstructor
 public class ProductQueryFetcher {
@@ -17,5 +19,11 @@ public class ProductQueryFetcher {
     public Mono<Product> getProduct(String id) {
 
         return service.getProduct(id);
+    }
+
+    @DgsQuery
+    public Mono<List<Product>> getAllProducts() {
+
+        return service.getAllProducts();
     }
 }
