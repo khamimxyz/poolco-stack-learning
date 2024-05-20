@@ -1,0 +1,11 @@
+input ReviewReq {
+    productId: String
+    star: Int
+    reviewerName: String
+}
+
+type Review {
+    productId: String
+    star: Int
+    reviewerName: String
+}

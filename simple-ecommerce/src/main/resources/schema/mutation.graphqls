@@ -1,0 +1,6 @@
+type Mutation {
+    addProduct(productReq: ProductReq): Product
+    updateProduct(id: String, productReq: ProductReq): Product
+    checkout(orderReq: OrderReq): Order
+    addReview(reviewReq: ReviewReq): Review
+}
