@@ -49,14 +49,6 @@ public class ProductService {
       return Mono.fromCallable(() -> reviewRepository.create(review));
     }
 
-    public Mono<Product> updateProduct(String id, ProductReq productReq) {
-
-      Product product = converter.fromProductReq(productReq, null);
-      product.setId(id);
-
-      return repository.update(product);
-    }
-
     public Mono<Product> getProduct(String id) {
       return Mono.fromCallable(() -> repository.get(id));
     }

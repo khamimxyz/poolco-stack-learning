@@ -64,31 +64,6 @@ public class DynamoDbRepository<T extends DynamoItem> {
       return list;
     }
 
-    public Mono<T> update(T item) {
-
-      final Map<String, AttributeValue> attributeMap = ModelMapper.mapToAttributes(item);
-      final Map<String, AttributeValueUpdate> itemUpdateMap = new HashMap<>();
-      for (String key : attributeMap.keySet()) {
-          if(!PK.equals(key) && !SK.equals(key)) {
-              itemUpdateMap.put(key, new AttributeValueUpdate().withValue(attributeMap.get(key)));
-          }
-      }
-
-      final UpdateItemRequest updateItemRequest = new UpdateItemRequest()
-        .withTableName(DynamoDbConstant.TABLE_NAME)
-        .withKey(
-          Map.of(
-            PK, new AttributeValue().withS(item.getPk()),
-            SK, new AttributeValue().withS(item.getSk())
-          )
-        )
-        .withAttributeUpdates(itemUpdateMap);
-
-      amazonDynamoDB.updateItem(updateItemRequest);
-
-      return Mono.just(item);
-    }
-
     @SuppressWarnings("unchecked")
     public Class<T> getEntityClass() {
       final Type superClass = getClass().getGenericSuperclass();

@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.model.order.Order;
 import xyz.khamim.slash.ecommerce.graphql.input.OrderReq;
+import xyz.khamim.slash.ecommerce.graphql.security.SecureMethod;
 import xyz.khamim.slash.ecommerce.graphql.service.OrderService;
 
 @DgsComponent
@@ -22,6 +23,7 @@ public class OrderController {
     }
 
     @DgsMutation
+    @SecureMethod(module = "order")
     public Mono<Order> checkout(OrderReq orderReq) {
 
         return service.checkout(orderReq);

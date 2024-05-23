@@ -85,13 +85,8 @@ class ProductServiceTest {
     Assertions.assertThat(actual).usingRecursiveComparison().isEqualTo(expected);
   }
 
-  // TODO
   @Test
-  void updateProduct() {
-  }
-
-  @Test
-  void getProduct() {
+  void getProduct_ShouldReturnCorrectly() {
 
     final Product product = TestDataFixture.getSampleOfProduct();
     when(productRepository.get(anyString()))
@@ -249,7 +244,7 @@ class ProductServiceTest {
   }
 
   @Test
-  void getProductWithReviews() {
+  void getProductWithReviews_ShouldCallRepository() {
 
     when(productRepository.getProductWithReviews(any(String.class)))
       .thenReturn(ProductWithReviewDto.builder().build());

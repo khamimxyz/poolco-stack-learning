@@ -4,6 +4,7 @@ import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
 import com.netflix.graphql.dgs.InputArgument;
+import graphql.schema.DataFetchingEnvironment;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.dto.ProductWithReviewDto;
@@ -12,6 +13,8 @@ import xyz.khamim.slash.ecommerce.graphql.input.ReviewReq;
 import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.input.ProductReq;
 import xyz.khamim.slash.ecommerce.graphql.model.Review;
+import xyz.khamim.slash.ecommerce.graphql.security.SecureMethod;
+import xyz.khamim.slash.ecommerce.graphql.service.FeedService;
 import xyz.khamim.slash.ecommerce.graphql.service.ProductService;
 
 import java.util.List;
@@ -21,6 +24,8 @@ import java.util.List;
 public class ProductController {
 
     private final ProductService service;
+
+    private final FeedService feedService;
 
     @DgsQuery
     public Mono<Product> getProduct(String id) {
@@ -40,20 +45,29 @@ public class ProductController {
     }
 
     @DgsMutation
-    public Mono<Product> addProduct(ProductReq productReq) {
+    @SecureMethod(module = "product")
+    public Mono<Product> addProduct(DataFetchingEnvironment env, ProductReq productReq) {
 
-        return service.createProduct(productReq);
+        return service.createProduct(productReq)
+          .map(product -> {
+              feedService.sendProductFeed(product);
+              return product;
+          });
     }
 
     @DgsMutation
+    @SecureMethod(module = "review")
     public Mono<Review> addReview(ReviewReq reviewReq) {
 
-        return service.createReview(reviewReq);
-    }
+        return service.createReview(reviewReq)
+          .flatMap(review -> {
+              if (review.getStar() == 5) {
+                  return getProduct(review.getProductId())
+                    .doOnNext(feedService::sendRecommendationFeed)
+                    .thenReturn(review);
+              }
 
-    @DgsMutation
-    public Mono<Product> updateProduct(String id, ProductReq productReq) {
-
-        return service.updateProduct(id, productReq);
+              return Mono.just(review);
+          });
     }
 }
