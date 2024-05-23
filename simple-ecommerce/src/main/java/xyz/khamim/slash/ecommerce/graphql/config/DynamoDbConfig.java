@@ -5,18 +5,24 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.client.builder.AwsClientBuilder;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class DynamoDbConfig {
 
+  @Value("${localstack.fakeAccessKey}")
+  private String fakeAccessKey;
+
+  @Value("${localstack.fakeSecretKey}")
+  private String fakeSecretKey;
+
+  @Value("${localstack.region}")
+  private String region;
+
   @Bean
   public AmazonDynamoDB amazonDynamoDB() {
-
-    String fakeAccessKey = "test";
-    String fakeSecretKey = "test";
-    String region = "ap-southeast-1";
 
     BasicAWSCredentials awsCreds = new BasicAWSCredentials(fakeAccessKey, fakeSecretKey);
 
