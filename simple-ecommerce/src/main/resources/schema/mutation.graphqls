@@ -3,4 +3,6 @@ type Mutation {
     updateProduct(id: String, productReq: ProductReq): Product
     checkout(orderReq: OrderReq): Order
     addReview(reviewReq: ReviewReq): Review
+    auth(authReq: AuthReq): AuthRes
+    verify(verifyReq: VerifyReq): VerifyRes
 }

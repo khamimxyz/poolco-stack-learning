@@ -21,7 +21,7 @@
 		<io.projectreactor.version>3.5.17</io.projectreactor.version>
 		<com.nimbusds.version>9.12</com.nimbusds.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
-<!--		<software.amazon.awssdk.version>2.25.55</software.amazon.awssdk.version>-->
+		<software.amazon.awssdk.version>2.25.55</software.amazon.awssdk.version>
 	</properties>
 	<dependencyManagement>
 		<dependencies>
@@ -68,14 +68,11 @@
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>${com.amazonaws.version}</version>
 		</dependency>
-
-<!--		<dependency>-->
-<!--			<groupId>software.amazon.awssdk</groupId>-->
-<!--			<artifactId>cognitoidentityprovider</artifactId>-->
-<!--			<version>${software.amazon.awssdk.version}</version>-->
-<!--		</dependency>-->
-
-
+		<dependency>
+			<groupId>software.amazon.awssdk</groupId>
+			<artifactId>cognitoidentityprovider</artifactId>
+			<version>${software.amazon.awssdk.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
