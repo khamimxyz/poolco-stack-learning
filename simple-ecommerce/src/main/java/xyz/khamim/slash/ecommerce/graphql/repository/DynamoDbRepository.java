@@ -3,7 +3,6 @@ package xyz.khamim.slash.ecommerce.graphql.repository;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.*;
 import lombok.RequiredArgsConstructor;
-import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.constant.DynamoDbConstant;
 import xyz.khamim.slash.ecommerce.graphql.model.DynamoItem;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
@@ -11,7 +10,6 @@ import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
