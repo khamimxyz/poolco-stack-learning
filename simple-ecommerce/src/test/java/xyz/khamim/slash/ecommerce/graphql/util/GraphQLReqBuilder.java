@@ -36,9 +36,9 @@ public class GraphQLReqBuilder {
       } else if (field instanceof Map<?,?>) {
         ((Map<?, ?>) field).keySet().forEach(key -> {
           StringBuilder mapToFieldBuilder = new StringBuilder();
-          mapToFieldBuilder.append(key).append("{").append("\n");
+          mapToFieldBuilder.append(key).append("{").append(" ");
           List<String> details = (List<String>) ((Map<?, ?>) field).get(key);
-          details.forEach(detail -> mapToFieldBuilder.append(detail).append("\n"));
+          details.forEach(detail -> mapToFieldBuilder.append(detail).append(" "));
           mapToFieldBuilder.append("}");
           fieldAsString.add(mapToFieldBuilder.toString());
         });
@@ -58,9 +58,8 @@ public class GraphQLReqBuilder {
       for(Map.Entry<String, Object> entry : argsMap.entrySet()) {
         Object value = entry.getValue();
         queryBuilder.append(entry.getKey()).append(":").append(" ");
-        String slashQuotes = "\\\\\"";
         if (value instanceof String) {
-          queryBuilder.append(slashQuotes).append(value).append(slashQuotes);
+          queryBuilder.append("\\\"").append(value).append("\\\"");
         } else if(value instanceof Number) {
           queryBuilder.append(value);
         } else {
@@ -68,6 +67,7 @@ public class GraphQLReqBuilder {
           mapper.configure(JsonWriteFeature.QUOTE_FIELD_NAMES.mappedFeature(), false);
           mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
           try {
+            String slashQuotes = "\\\\\"";
             queryBuilder.append(mapper.writeValueAsString(value).replaceAll("\"", slashQuotes));
           } catch (JsonProcessingException ignored) {}
         }
