@@ -11,6 +11,7 @@ import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.model.Review;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ProductQueryUtil;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +20,8 @@ import java.util.Map;
 @Repository
 public class ProductRepository extends DynamoDbRepository<Product> {
 
-  public ProductRepository(AmazonDynamoDB amazonDynamoDB) {
-    super(amazonDynamoDB);
+  public ProductRepository(final AmazonDynamoDB amazonDynamoDB, final DynamoDbTable table) {
+    super(amazonDynamoDB, table);
   }
 
   public List<Product> getAll(FilterProductReq req) {
@@ -30,19 +31,22 @@ public class ProductRepository extends DynamoDbRepository<Product> {
     QueryRequest queryRequest;
 
     if(req == null) {
-      queryRequest = ProductQueryUtil.getQueryWithoutFilter();
+      queryRequest = ProductQueryUtil.getQueryWithoutFilter(table.getTableName());
     } else {
       if (req.getCategory() == null) {
         if (req.getSortReqList() == null) {
-          queryRequest = ProductQueryUtil.getQueryWithoutFilter();
+          queryRequest = ProductQueryUtil.getQueryWithoutFilter(table.getTableName());
         } else {
-          queryRequest = ProductQueryUtil.getQueryWithoutFilter(req.getSortReqList().get(0));
+          queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+            req.getSortReqList().get(0), table.getTableName());
         }
       } else {
         if (req.getSortReqList() == null) {
-          queryRequest = ProductQueryUtil.getQueryByCategory(req.getCategory());
+          queryRequest = ProductQueryUtil.getQueryByCategory(
+            req.getCategory(), table.getTableName());
         } else {
-          queryRequest = ProductQueryUtil.getQueryByCategory(req.getCategory(), req.getSortReqList().get(0));
+          queryRequest = ProductQueryUtil.getQueryByCategory(
+            req.getCategory(), req.getSortReqList().get(0), table.getTableName());
         }
       }
     }
@@ -56,7 +60,7 @@ public class ProductRepository extends DynamoDbRepository<Product> {
   public ProductWithReviewDto getProductWithReviews(String id) {
 
     final QueryRequest queryRequest = new QueryRequest()
-      .withTableName(getTableName())
+      .withTableName(table.getTableName())
       .withKeyConditionExpression("#pk = :pkVal AND begins_with(#sk, :skVal)")
       .withExpressionAttributeNames(Map.of("#pk", "pk", "#sk", "sk"))
       .withExpressionAttributeValues(

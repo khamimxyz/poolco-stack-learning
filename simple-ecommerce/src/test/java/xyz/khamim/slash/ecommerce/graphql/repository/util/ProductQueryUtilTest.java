@@ -4,6 +4,7 @@ import com.amazonaws.services.dynamodbv2.model.QueryRequest;
 import org.junit.jupiter.api.Test;
 import xyz.khamim.slash.ecommerce.graphql.constant.DynamoDbConstant;
 import xyz.khamim.slash.ecommerce.graphql.input.SortReq;
+import xyz.khamim.slash.ecommerce.graphql.util.TestConstant;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,7 +13,8 @@ class ProductQueryUtilTest {
   @Test
   void getQueryWithoutFilter_WithoutSortShouldHaveNoIndex() {
 
-    final QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter();
+    final QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+      TestConstant.TABLE_NAME);
 
     assertNull(queryRequest.getIndexName());
   }
@@ -25,7 +27,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.ASC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(priceAscSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+      priceAscSortReq, TestConstant.TABLE_NAME);
 
     assertEquals(DynamoDbConstant.PRICE_SORT_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(true, queryRequest.getScanIndexForward());
@@ -39,7 +42,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.DESC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(priceAscSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+      priceAscSortReq, TestConstant.TABLE_NAME);
 
     assertEquals(DynamoDbConstant.PRICE_SORT_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(false, queryRequest.getScanIndexForward());
@@ -53,7 +57,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.ASC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(createdDateSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+      createdDateSortReq, TestConstant.TABLE_NAME);
 
     assertEquals(DynamoDbConstant.CREATED_DATE_SORT_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(true, queryRequest.getScanIndexForward());
@@ -67,7 +72,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.DESC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(createdDateSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryWithoutFilter(
+      createdDateSortReq, TestConstant.TABLE_NAME);
 
     assertEquals(DynamoDbConstant.CREATED_DATE_SORT_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(false, queryRequest.getScanIndexForward());
@@ -81,7 +87,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.ASC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone", priceAscSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory(
+      "Handphone", priceAscSortReq, TestConstant.TABLE_NAME);
     assertEquals(DynamoDbConstant.PRICE_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(true, queryRequest.getScanIndexForward());
   }
@@ -94,7 +101,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.DESC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone", priceAscSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory(
+      "Handphone", priceAscSortReq, TestConstant.TABLE_NAME);
     assertEquals(DynamoDbConstant.PRICE_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(false, queryRequest.getScanIndexForward());
   }
@@ -107,7 +115,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.ASC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone", createdDateAscSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory(
+      "Handphone", createdDateAscSortReq, TestConstant.TABLE_NAME);
     assertEquals(DynamoDbConstant.CREATED_DATE_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(true, queryRequest.getScanIndexForward());
   }
@@ -120,7 +129,8 @@ class ProductQueryUtilTest {
       .sortType(DynamoDbConstant.DESC_SORT)
       .build();
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone", createdDateDescSortReq);
+    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory(
+      "Handphone", createdDateDescSortReq, TestConstant.TABLE_NAME);
     assertEquals(DynamoDbConstant.CREATED_DATE_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(false, queryRequest.getScanIndexForward());
   }
@@ -128,7 +138,7 @@ class ProductQueryUtilTest {
   @Test
   void getQueryByCategory_DefaultSortShouldBeCreatedDateDesc() {
 
-    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone");
+    QueryRequest queryRequest = ProductQueryUtil.getQueryByCategory("Handphone", TestConstant.TABLE_NAME);
     assertEquals(DynamoDbConstant.CREATED_DATE_INDEX_NAME, queryRequest.getIndexName());
     assertEquals(false, queryRequest.getScanIndexForward());
   }

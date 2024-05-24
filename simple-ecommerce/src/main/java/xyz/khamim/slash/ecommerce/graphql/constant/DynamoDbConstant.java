@@ -6,7 +6,6 @@ public interface DynamoDbConstant {
   String CREATED_DATE_INDEX_NAME = "CreatedDateIndex";
   String PRICE_SORT_INDEX_NAME = "PriceSortIndex";
   String CREATED_DATE_SORT_INDEX_NAME = "CreatedDateSortIndex";
-  String TABLE_NAME = "MyEcommerce";
   String PRICE_ATTR = "price";
   String CREATED_DATE_ATTR = "createdDate";
   String ASC_SORT = "ASC";

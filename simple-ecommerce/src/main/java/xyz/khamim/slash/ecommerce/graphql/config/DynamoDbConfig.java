@@ -8,6 +8,7 @@ import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClientBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
 
 @Configuration
 public class DynamoDbConfig {
@@ -21,6 +22,9 @@ public class DynamoDbConfig {
   @Value("${localstack.region}")
   private String region;
 
+  @Value("${localstack.dynamodb.tableName}")
+  private String tableName;
+
   @Bean
   public AmazonDynamoDB amazonDynamoDB() {
 
@@ -31,5 +35,11 @@ public class DynamoDbConfig {
           "http://localhost:4566", region))
         .withCredentials(new AWSStaticCredentialsProvider(awsCreds))
         .build();
+  }
+
+  @Bean
+  public DynamoDbTable dynamoDbTable() {
+
+    return new DynamoDbTable(tableName);
   }
 }

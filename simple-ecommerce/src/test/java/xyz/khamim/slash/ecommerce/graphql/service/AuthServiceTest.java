@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import software.amazon.awssdk.awscore.exception.AwsErrorDetails;
 import software.amazon.awssdk.services.cognitoidentityprovider.CognitoIdentityProviderClient;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminRespondToAuthChallengeRequest;
 import software.amazon.awssdk.services.cognitoidentityprovider.model.AdminRespondToAuthChallengeResponse;
@@ -94,7 +95,14 @@ class AuthServiceTest {
   void verify_ShouldReturnEmptyTokenWhenFailed() {
 
     when(cognitoClient.adminRespondToAuthChallenge(any(AdminRespondToAuthChallengeRequest.class)))
-      .thenThrow(CognitoIdentityProviderException.builder().message("invalid").build());
+      .thenThrow(
+        CognitoIdentityProviderException.builder()
+          .awsErrorDetails(
+            AwsErrorDetails.builder()
+              .errorMessage("invalid")
+              .build()
+          ).build()
+      );
 
     RuntimeException thrown = Assertions.catchThrowableOfType(() -> authService.verify(verifyReq),
       RuntimeException.class);

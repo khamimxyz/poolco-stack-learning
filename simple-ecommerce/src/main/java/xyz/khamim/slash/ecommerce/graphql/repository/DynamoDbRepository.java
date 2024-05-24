@@ -3,9 +3,9 @@ package xyz.khamim.slash.ecommerce.graphql.repository;
 import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
 import com.amazonaws.services.dynamodbv2.model.*;
 import lombok.RequiredArgsConstructor;
-import xyz.khamim.slash.ecommerce.graphql.constant.DynamoDbConstant;
 import xyz.khamim.slash.ecommerce.graphql.model.DynamoItem;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -20,10 +20,11 @@ public class DynamoDbRepository<T extends DynamoItem> {
     private static final String SK = "sk";
     
     final AmazonDynamoDB amazonDynamoDB;
+    final DynamoDbTable table;
 
     public T create(T item) {
       final PutItemRequest putItemRequest = new PutItemRequest()
-        .withTableName(DynamoDbConstant.TABLE_NAME)
+        .withTableName(table.getTableName())
         .withItem(ModelMapper.mapToAttributes(item));
 
       amazonDynamoDB.putItem(putItemRequest);
@@ -34,7 +35,7 @@ public class DynamoDbRepository<T extends DynamoItem> {
     public T get(String id) {
       final String entity = getEntityName();
       final GetItemRequest getItemRequest = new GetItemRequest()
-        .withTableName(DynamoDbConstant.TABLE_NAME)
+        .withTableName(table.getTableName())
         .withKey(
           Map.of(
             PK, new AttributeValue().withS(entity),
@@ -50,7 +51,7 @@ public class DynamoDbRepository<T extends DynamoItem> {
     public List<T> getAll() {
 
       final QueryRequest queryRequest = new QueryRequest()
-        .withTableName(DynamoDbConstant.TABLE_NAME)
+        .withTableName(table.getTableName())
         .withKeyConditionExpression("#pk = :val")
         .withExpressionAttributeNames(Map.of("#pk", "pk"))
         .withExpressionAttributeValues(Map.of(":val", new AttributeValue().withS(getEntityName())));
@@ -82,10 +83,5 @@ public class DynamoDbRepository<T extends DynamoItem> {
     public String getEntityName() {
 
       return getEntityClass().getSimpleName().toLowerCase();
-    }
-
-    public String getTableName() {
-
-      return DynamoDbConstant.TABLE_NAME;
     }
 }

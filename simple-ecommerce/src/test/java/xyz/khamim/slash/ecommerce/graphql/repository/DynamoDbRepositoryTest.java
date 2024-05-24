@@ -13,6 +13,8 @@ import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.model.Review;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ModelMapper;
 import xyz.khamim.slash.ecommerce.graphql.mock.TestDataFixture;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
+import xyz.khamim.slash.ecommerce.graphql.util.TestConstant;
 
 import java.util.List;
 import java.util.Map;
@@ -27,6 +29,9 @@ class DynamoDbRepositoryTest {
   @Mock
   private AmazonDynamoDB amazonDynamoDB;
 
+  @Mock
+  private DynamoDbTable table;
+
   @InjectMocks
   private ProductRepository repository;
 
@@ -35,7 +40,9 @@ class DynamoDbRepositoryTest {
 
   @BeforeEach
   void setUp() {
+
     MockitoAnnotations.openMocks(this);
+    when(table.getTableName()).thenReturn(TestConstant.TABLE_NAME);
   }
 
   @Test

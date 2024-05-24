@@ -16,6 +16,8 @@ import xyz.khamim.slash.ecommerce.graphql.input.FilterProductReq;
 import xyz.khamim.slash.ecommerce.graphql.input.SortReq;
 import xyz.khamim.slash.ecommerce.graphql.mock.TestDataFixture;
 import xyz.khamim.slash.ecommerce.graphql.repository.util.ProductQueryUtil;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
+import xyz.khamim.slash.ecommerce.graphql.util.TestConstant;
 
 import java.util.List;
 import java.util.Map;
@@ -30,18 +32,22 @@ class ProductRepositoryTest {
   @Mock
   private AmazonDynamoDB amazonDynamoDB;
 
+  @Mock
+  private DynamoDbTable table;
+
   @InjectMocks
   private ProductRepository repository;
 
   @BeforeEach
   void setUp() {
     MockitoAnnotations.openMocks(this);
+    when(table.getTableName()).thenReturn(TestConstant.TABLE_NAME);
   }
 
   @Test
   void getAll_NoFilterShouldUseDefaultQuery() {
 
-    final QueryRequest expected = ProductQueryUtil.getQueryWithoutFilter();
+    final QueryRequest expected = ProductQueryUtil.getQueryWithoutFilter(TestConstant.TABLE_NAME);
 
     when(amazonDynamoDB.query(any(QueryRequest.class)))
       .thenReturn(new QueryResult().withItems(Map.of()));
@@ -62,7 +68,8 @@ class ProductRepositoryTest {
       .sortType(DynamoDbConstant.DESC_SORT)
       .build();
 
-    final QueryRequest expected = ProductQueryUtil.getQueryWithoutFilter(sortReq);
+    final QueryRequest expected = ProductQueryUtil.getQueryWithoutFilter(
+      sortReq, TestConstant.TABLE_NAME);
 
     when(amazonDynamoDB.query(any(QueryRequest.class)))
       .thenReturn(new QueryResult().withItems(Map.of()));
@@ -84,7 +91,8 @@ class ProductRepositoryTest {
 
     final String category = "Handphone";
 
-    final QueryRequest expected = ProductQueryUtil.getQueryByCategory(category);
+    final QueryRequest expected = ProductQueryUtil.getQueryByCategory(
+      category, TestConstant.TABLE_NAME);
 
     when(amazonDynamoDB.query(any(QueryRequest.class)))
       .thenReturn(new QueryResult().withItems(Map.of()));
@@ -111,7 +119,8 @@ class ProductRepositoryTest {
       .sortType(DynamoDbConstant.ASC_SORT)
       .build();
 
-    final QueryRequest expected = ProductQueryUtil.getQueryByCategory(category, sortReq);
+    final QueryRequest expected = ProductQueryUtil.getQueryByCategory(
+      category, sortReq, TestConstant.TABLE_NAME);
 
     when(amazonDynamoDB.query(any(QueryRequest.class)))
       .thenReturn(new QueryResult().withItems(Map.of()));

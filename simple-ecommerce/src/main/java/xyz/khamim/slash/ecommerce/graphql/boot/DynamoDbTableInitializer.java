@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import xyz.khamim.slash.ecommerce.graphql.constant.DynamoDbConstant;
+import xyz.khamim.slash.ecommerce.graphql.util.DynamoDbTable;
 
 @Component
 @Slf4j
@@ -15,9 +16,11 @@ public class DynamoDbTableInitializer {
 
     private final AmazonDynamoDB amazonDynamoDB;
 
+    private final DynamoDbTable dynamoDbTable;
+
     @PostConstruct
     public void initTable() {
-        final String tableName = "MyEcommerce";
+        final String tableName = dynamoDbTable.getTableName();
 
         try {
             amazonDynamoDB.describeTable(tableName);

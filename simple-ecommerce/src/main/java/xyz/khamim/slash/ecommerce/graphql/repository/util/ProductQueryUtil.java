@@ -11,15 +11,15 @@ public class ProductQueryUtil {
 
   private static final String ENTITY_NAME = "product";
 
-  public static QueryRequest getQueryWithoutFilter() {
+  public static QueryRequest getQueryWithoutFilter(final String tableName) {
 
-    return getQueryWithoutFilter(null);
+    return getQueryWithoutFilter(null, tableName);
   }
 
-  public static QueryRequest getQueryWithoutFilter(final SortReq sortReq) {
+  public static QueryRequest getQueryWithoutFilter(final SortReq sortReq, String tableName) {
 
     final QueryRequest queryRequest = new QueryRequest()
-      .withTableName(DynamoDbConstant.TABLE_NAME)
+      .withTableName(tableName)
       .withKeyConditionExpression("#pk = :val")
       .withFilterExpression("attribute_exists(#attr)")
       .withExpressionAttributeNames(Map.of("#pk", "pk", "#attr", "category"))
@@ -40,19 +40,21 @@ public class ProductQueryUtil {
     return queryRequest;
   }
 
-  public static QueryRequest getQueryByCategory(final String category) {
+  public static QueryRequest getQueryByCategory(final String category, final String tableName) {
 
     return getQueryByCategory(category,
       SortReq.builder()
         .sortBy(DynamoDbConstant.CREATED_DATE_ATTR)
         .sortType(DynamoDbConstant.DESC_SORT)
-        .build()
+        .build(),
+      tableName
     );
   }
 
-  public static QueryRequest getQueryByCategory(final String category, final SortReq sortReq) {
+  public static QueryRequest getQueryByCategory(
+    final String category, final SortReq sortReq, final String tableName) {
     final QueryRequest queryRequest = new QueryRequest()
-      .withTableName(DynamoDbConstant.TABLE_NAME)
+      .withTableName(tableName)
       .withKeyConditionExpression("#category = :val")
       .withExpressionAttributeNames(Map.of("#category", "category"))
       .withExpressionAttributeValues(
