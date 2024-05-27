@@ -16,13 +16,18 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <com.netflix.graphql.dgs.version>8.4.2</com.netflix.graphql.dgs.version>
-        <software.amazon.awssdk.version>2.17.87</software.amazon.awssdk.version>
+        <software.amazon.awssdk.version>2.25.55</software.amazon.awssdk.version>
     </properties>
     <dependencies>
         <dependency>
             <groupId>com.netflix.graphql.dgs</groupId>
             <artifactId>graphql-dgs-webflux-starter</artifactId>
             <version>${com.netflix.graphql.dgs.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>cognitoidentityprovider</artifactId>
+            <version>${software.amazon.awssdk.version}</version>
         </dependency>
     </dependencies>
 </project>

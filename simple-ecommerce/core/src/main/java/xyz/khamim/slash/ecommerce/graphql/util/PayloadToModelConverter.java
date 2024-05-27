@@ -1,10 +1,15 @@
-package xyz.khamim.slash.ecommerce.graphql.service.helper;
+package xyz.khamim.slash.ecommerce.graphql.util;
 
 import org.springframework.stereotype.Component;
+import xyz.khamim.slash.ecommerce.graphql.input.OrderProductReq;
 import xyz.khamim.slash.ecommerce.graphql.input.ProductReq;
 import xyz.khamim.slash.ecommerce.graphql.input.ReviewReq;
+import xyz.khamim.slash.ecommerce.graphql.model.OrderProduct;
 import xyz.khamim.slash.ecommerce.graphql.model.Product;
 import xyz.khamim.slash.ecommerce.graphql.model.Review;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class PayloadToModelConverter {
@@ -26,5 +31,19 @@ public class PayloadToModelConverter {
                 .star(reviewReq.getStar())
                 .reviewerName(reviewReq.getReviewerName())
                 .build();
+    }
+
+    public List<OrderProduct> fromOrderProductReq(List<OrderProductReq> list) {
+
+        final List<OrderProduct> orderProducts = new ArrayList<>();
+        list.forEach(e -> orderProducts.add(OrderProduct.builder()
+          .productId(e.getProductId())
+          .productName(e.getProductName())
+          .qty(e.getQty())
+          .price(e.getPrice())
+          .build())
+        );
+
+        return orderProducts;
     }
 }

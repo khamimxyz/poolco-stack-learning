@@ -9,9 +9,9 @@ import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.dto.ProductWithReviewDto;
 import xyz.khamim.slash.ecommerce.graphql.input.FilterProductReq;
+import xyz.khamim.slash.ecommerce.graphql.input.ProductReq;
 import xyz.khamim.slash.ecommerce.graphql.input.ReviewReq;
 import xyz.khamim.slash.ecommerce.graphql.model.Product;
-import xyz.khamim.slash.ecommerce.graphql.input.ProductReq;
 import xyz.khamim.slash.ecommerce.graphql.model.Review;
 import xyz.khamim.slash.ecommerce.graphql.security.SecureMethod;
 import xyz.khamim.slash.ecommerce.graphql.service.FeedService;
@@ -28,25 +28,25 @@ public class ProductController {
     private final FeedService feedService;
 
     @DgsQuery
-    public Mono<Product> getProduct(String id) {
+    public Mono<Product> getProduct(@InputArgument final String id) {
 
         return service.getProduct(id);
     }
 
     @DgsQuery
-    public Mono<ProductWithReviewDto> getProductWithReviews(String id) {
+    public Mono<ProductWithReviewDto> getProductWithReviews(@InputArgument final String id) {
 
         return service.getProductWithReviews(id);
     }
     @DgsQuery
-    public Mono<List<Product>> getAllProducts(@InputArgument FilterProductReq req) {
+    public Mono<List<Product>> getAllProducts(@InputArgument final FilterProductReq req) {
 
         return service.getAllProducts(req);
     }
 
     @DgsMutation
     @SecureMethod(module = "product")
-    public Mono<Product> addProduct(DataFetchingEnvironment env, ProductReq productReq) {
+    public Mono<Product> addProduct(final DataFetchingEnvironment env, @InputArgument final ProductReq productReq) {
 
         return service.createProduct(productReq)
           .map(product -> {
@@ -57,7 +57,7 @@ public class ProductController {
 
     @DgsMutation
     @SecureMethod(module = "review")
-    public Mono<Review> addReview(ReviewReq reviewReq) {
+    public Mono<Review> addReview(final DataFetchingEnvironment env, @InputArgument final ReviewReq reviewReq) {
 
         return service.createReview(reviewReq)
           .flatMap(review -> {

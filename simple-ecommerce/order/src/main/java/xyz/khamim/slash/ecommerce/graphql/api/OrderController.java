@@ -3,6 +3,7 @@ package xyz.khamim.slash.ecommerce.graphql.api;
 import com.netflix.graphql.dgs.DgsComponent;
 import com.netflix.graphql.dgs.DgsMutation;
 import com.netflix.graphql.dgs.DgsQuery;
+import com.netflix.graphql.dgs.InputArgument;
 import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 import xyz.khamim.slash.ecommerce.graphql.model.Order;
@@ -17,14 +18,14 @@ public class OrderController {
     private final OrderService service;
 
     @DgsQuery
-    public Mono<Order> getOrder(String id) {
+    public Mono<Order> getOrder(@InputArgument String id) {
 
         return service.getOrder(id);
     }
 
     @DgsMutation
     @SecureMethod(module = "order")
-    public Mono<Order> checkout(OrderReq orderReq) {
+    public Mono<Order> checkout(@InputArgument OrderReq orderReq) {
 
         return service.checkout(orderReq);
     }
