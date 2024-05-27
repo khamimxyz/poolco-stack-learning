@@ -1,0 +1,37 @@
+input OrderProductReq {
+    productId: String,
+    productName: String,
+    qty: Int,
+    price: Int
+}
+
+input OrderReq {
+    orderProducts: [OrderProductReq]
+    customerName: String
+}
+
+type OrderProduct {
+    productId: String,
+    productName: String,
+    qty: Int,
+    price: Int
+}
+
+type OrderData {
+    orderProducts: [OrderProduct]
+}
+
+type Order {
+    id: String,
+    orderData: OrderData,
+    createdDate: String
+    createdBy: String
+}
+
+type Mutation {
+    checkout(orderReq: OrderReq): Order
+}
+
+type Query {
+    getOrder(id: String!): Order
+}

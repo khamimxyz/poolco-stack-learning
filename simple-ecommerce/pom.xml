@@ -11,13 +11,19 @@
 	<groupId>xyz.khamim.slash.ecommerce</groupId>
 	<artifactId>simple-ecommerce</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>pom</packaging>
 	<name>simple-ecommerce</name>
 	<description>simple-ecommerce</description>
+	<modules>
+		<module>core</module>
+		<module>auth</module>
+        <module>product</module>
+        <module>order</module>
+    </modules>
 	<properties>
 		<java.version>17</java.version>
 		<software.amazon.awssdk.version>2.17.87</software.amazon.awssdk.version>
 		<com.amazonaws.version>1.12.717</com.amazonaws.version>
-		<com.netflix.graphql.dgs.version>8.4.2</com.netflix.graphql.dgs.version>
 		<io.projectreactor.version>3.5.17</io.projectreactor.version>
 		<com.nimbusds.version>9.12</com.nimbusds.version>
 		<spring-cloud.version>2023.0.1</spring-cloud.version>
@@ -59,11 +65,6 @@
 			<artifactId>spring-kafka</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>com.netflix.graphql.dgs</groupId>
-			<artifactId>graphql-dgs-webflux-starter</artifactId>
-			<version>${com.netflix.graphql.dgs.version}</version>
-		</dependency>
-		<dependency>
 			<groupId>com.amazonaws</groupId>
 			<artifactId>aws-java-sdk-dynamodb</artifactId>
 			<version>${com.amazonaws.version}</version>
@@ -91,14 +92,5 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 
 </project>

@@ -1,0 +1,24 @@
+input AuthReq {
+    email: String
+    group: String
+}
+
+input VerifyReq {
+    session: String
+    email: String
+    code: String
+}
+
+type AuthRes {
+    session: String,
+    message: String
+}
+
+type VerifyRes {
+    token: String
+}
+
+type Mutation {
+    auth(authReq: AuthReq): AuthRes
+    verify(verifyReq: VerifyReq): VerifyRes
+}

@@ -1,6 +1,0 @@
-type Query {
-    getProduct(id: String!): Product
-    getAllProducts(req: FilterProductReq): [Product]
-    getOrder(id: String!): Order
-    getProductWithReviews(id: String!): ProductWithReview
-}

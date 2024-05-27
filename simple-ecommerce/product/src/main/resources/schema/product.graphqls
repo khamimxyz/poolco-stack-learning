@@ -1,0 +1,52 @@
+input ProductReq {
+    name: String,
+    category: String,
+    price: Int
+}
+
+input SortReq {
+    sortBy: String!
+    sortType: String!
+}
+
+input FilterProductReq {
+    category: String,
+    sortReqList: [SortReq]
+}
+
+type Product {
+    id: String,
+    name: String,
+    category: String
+    price: Int
+    createdDate: String
+}
+
+input ReviewReq {
+    productId: String
+    star: Int
+    reviewerName: String
+}
+
+type Review {
+    productId: String
+    star: Int
+    reviewerName: String
+}
+
+type ProductWithReview {
+    product: Product,
+    reviews: [Review]
+}
+
+type Mutation {
+    addProduct(productReq: ProductReq): Product
+    updateProduct(id: String, productReq: ProductReq): Product
+    addReview(reviewReq: ReviewReq): Review
+}
+
+type Query {
+    getProduct(id: String!): Product
+    getAllProducts(req: FilterProductReq): [Product]
+    getProductWithReviews(id: String!): ProductWithReview
+}
